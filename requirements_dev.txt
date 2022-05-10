@@ -1,0 +1,7 @@
+black
+pylint
+pytest
+pytest-docker
+pytest-dotenv
+pytest-pinned
+-r requirements.txt
