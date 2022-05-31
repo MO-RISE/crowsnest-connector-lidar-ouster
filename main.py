@@ -33,6 +33,7 @@ MQTT_TOPIC_POINTCLOUD: str = env("MQTT_TOPIC_POINTCLOUD")
 MQTT_TOPIC_POINTCLOUD_COMPRESSED: str = env("MQTT_TOPIC_POINTCLOUD_COMPRESSED", None)
 
 OUSTER_HOSTNAME: str = env("OUSTER_HOSTNAME")
+OUSTER_LIDAR_PORT: int = env.int("OUSTER_LIDAR_PORT", None)
 
 # These are a set of Euler angles (roll, pitch, yaw) taking us from the platform body
 # frame to the Sensor frame, as defined in the Sensor documentation.
@@ -152,7 +153,9 @@ if __name__ == "__main__":
     LOGGER.info("Processing packages!")
 
     with closing(
-        client.Scans.stream(OUSTER_HOSTNAME, config.udp_port_lidar, complete=True)
+        client.Scans.stream(
+            OUSTER_HOSTNAME, OUSTER_LIDAR_PORT or config.udp_port_lidar, complete=True
+        )
     ) as stream:
 
         # Create a look-up table to cartesian projection
