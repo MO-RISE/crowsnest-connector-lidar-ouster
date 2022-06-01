@@ -9,10 +9,7 @@ For now, this microservice jsut does the basics.
 * Transform these to the NED frame (requires manual input for now and assumes a static sensor)
 * Wraps into a brefv message and outputs over MQTT
 
-The docker image also contains a command line application for configuring the sensor, run as:
-```
-docker run --rm ghcr.io/mo-rise/crowsnest-connector-lidar-ouster ouster-configure --help
-```
+For configuring the sensor hardware, the [TCP API](https://static.ouster.dev/sensor-docs/image_route1/image_route2/common_sections/API/tcp-api.html) is recommended.
 
 ### Typical setup (docker-compose)
 
