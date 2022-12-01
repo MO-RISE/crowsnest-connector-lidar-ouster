@@ -89,7 +89,7 @@ def to_brefv(pcd: np.ndarray) -> Envelope:
 
     envelope = Envelope(
         sent_at=datetime.now(timezone.utc).isoformat(),
-        message=pcd.tolist(),
+        message={"points": pcd.tolist()}
     )
 
     LOGGER.debug("Assembled into brefv envelope: %s", envelope)
