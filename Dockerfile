@@ -1,6 +1,6 @@
 FROM python:3.9-slim
 
-COPY --chmod=555 ./bin/* /usr/local/bin/
+# COPY --chmod=555 ./bin/* /usr/local/bin/
 
 COPY requirements.txt requirements.txt
 
