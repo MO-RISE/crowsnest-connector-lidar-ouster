@@ -21,6 +21,10 @@ from brefv.envelope import Envelope
 # Reading config from environment variables
 env = Env()
 
+SAVE_TO_FILE_ACTIVE: bool = env.bool("SAVE_TO_FILE_ACTIVE", False)
+SAVE_TO_FILE_PATH: str = env("SAVE_TO_FILE_PATH", "/")
+
+MQTT_STREAM_ACTIVE: bool = env.bool("MQTT_STREAM_ACTIVE", False)
 MQTT_BROKER_HOST: str = env("MQTT_BROKER_HOST", "localhost")
 MQTT_BROKER_PORT: int = env.int("MQTT_BROKER_PORT", 1883)
 MQTT_CLIENT_ID: str = env("MQTT_CLIENT_ID", None)
@@ -51,14 +55,18 @@ logging.captureWarnings(True)
 warnings.filterwarnings("once")
 LOGGER = logging.getLogger("crowsnest-connector-lidar-ouster")
 
-# Create mqtt client and configure it according to configuration
-mq = MQTT(client_id=MQTT_CLIENT_ID, transport=MQTT_TRANSPORT)
-mq.username_pw_set(MQTT_USER, MQTT_PASSWORD)
-if MQTT_TLS:
-    mq.tls_set()
 
-mq.enable_logger(LOGGER)
+def connect_to_mqtt():
+    """Connect to MQTT broker"""
 
+    # Create mqtt client and configure it according to configuration
+    mq = MQTT(client_id=MQTT_CLIENT_ID, transport=MQTT_TRANSPORT)
+    mq.username_pw_set(MQTT_USER, MQTT_PASSWORD)
+    if MQTT_TLS:
+        mq.tls_set()
+
+    mq.enable_logger(LOGGER)
+    return mq
 
 def rotate_pcd(pcd: np.ndarray, attitude: list) -> np.ndarray:
     """Rotate pcd according to the sensor attitude
@@ -115,7 +123,8 @@ def to_mqtt(payload: Any, topic: str):
         LOGGER.exception("Failed publishing to broker!")
 
 
-if __name__ == "__main__":
+def stream_to_MQTT():
+    mq = connect_to_mqtt()
 
     # Build pipeline
     LOGGER.info("Building pipeline...")
@@ -126,6 +135,7 @@ if __name__ == "__main__":
         .map(partial(rotate_pcd, attitude=OUSTER_ATTITUDE))
         .map(to_brefv)
     )
+
     pipe_to_brefv.sink(partial(to_mqtt, topic=MQTT_TOPIC_POINTCLOUD))
 
     if MQTT_TOPIC_POINTCLOUD_COMPRESSED:
@@ -142,6 +152,17 @@ if __name__ == "__main__":
 
     # Ouster SDK runs in the foreground so we put the MQTT stuff in a separate thread
     threading.Thread(target=mq.loop_forever, daemon=True).start()
+
+    return source
+
+    
+
+
+if __name__ == "__main__":
+
+    if MQTT_STREAM_ACTIVE == True:
+        source = stream_to_MQTT()
+
 
     LOGGER.info("Connecting to Ouster sensor...")
 
@@ -163,4 +184,9 @@ if __name__ == "__main__":
             # obtain destaggered xyz representation
             xyz_destaggered = client.destagger(stream.metadata, xyz_lut(scan))
 
-            source.emit(xyz_destaggered)
+            # TODO: CHECK IF THIS IS THE RIGHT WAY TO DO IT
+            if MQTT_STREAM_ACTIVE == True:
+                source.emit(xyz_destaggered)
+
+    
+    

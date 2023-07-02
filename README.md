@@ -36,6 +36,8 @@ services:
 
 ## Development setup
 
+OUSTER-SDK only supporting not higher then python 3.9 (2023-06-02)  
+
 To setup the development environment:
 
     python3 -m venv venv
@@ -54,6 +56,14 @@ To run the tests:
 
     no automatic tests yet...
 
+
+In addition, code for brefv must be generated using the following commands:
+
+```bach
+mkdir brefv
+datamodel-codegen --input brefv/envelope.json --input-file-type jsonschema --output brefv/envelope.py
+datamodel-codegen --input brefv/messages --input-file-type jsonschema  --reuse-model --output brefv/messages
+```
 
 ## License
 Apache 2.0, see [LICENSE](./LICENSE)

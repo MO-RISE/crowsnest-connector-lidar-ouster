@@ -77,6 +77,10 @@ docs/_build/
 # PyBuilder
 target/
 
+# Other
+/data
+/wheel-pkg
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
