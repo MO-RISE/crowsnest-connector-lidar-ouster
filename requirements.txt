@@ -6,3 +6,4 @@ datamodel-code-generator
 ouster-sdk
 numpy
 scipy
+matplotlib

@@ -1,0 +1,19 @@
+version: '3'
+services:
+
+  ouster-lidar:
+    container_name: cw-ouster-lidar-0
+    # image: ghcr.io/mo-rise/crowsnest-connector-lidar-ouster:latest
+    image: cw-ouster-lidar
+    build: .
+    restart: unless-stopped
+    network_mode: "host"
+    environment:
+      - MQTT_BROKER_HOST=localhost
+      - MQTT_BROKER_PORT=1883
+      # - MQTT_TOPIC_POINTCLOUD=CROWSNEST/<platform>/LIDAR/<device_id>/POINTCLOUD
+      - MQTT_TOPIC_POINTCLOUD=CROWSNEST/TEST/LIDAR/0/POINTCLOUD
+      # IP adress of sensor 
+      - OUSTER_HOSTNAME=10.10.40.2
+      - OUSTER_ATTITUDE=90,45,180
+      - POINTCLOUD_FREQUENCY=2

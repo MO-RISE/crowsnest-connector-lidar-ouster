@@ -21,7 +21,7 @@ from brefv.envelope import Envelope
 # Reading config from environment variables
 env = Env()
 
-MQTT_BROKER_HOST: str = env("MQTT_BROKER_HOST")
+MQTT_BROKER_HOST: str = env("MQTT_BROKER_HOST", "localhost")
 MQTT_BROKER_PORT: int = env.int("MQTT_BROKER_PORT", 1883)
 MQTT_CLIENT_ID: str = env("MQTT_CLIENT_ID", None)
 MQTT_TRANSPORT: str = env("MQTT_TRANSPORT", "tcp")
@@ -29,10 +29,10 @@ MQTT_TLS: bool = env.bool("MQTT_TLS", False)
 MQTT_USER: str = env("MQTT_USER", None)
 MQTT_PASSWORD: str = env("MQTT_PASSWORD", None)
 
-MQTT_TOPIC_POINTCLOUD: str = env("MQTT_TOPIC_POINTCLOUD")
+MQTT_TOPIC_POINTCLOUD: str = env("MQTT_TOPIC_POINTCLOUD", "CROWSNEST/TEST/LIDAR/0/POINTCLOUD")
 MQTT_TOPIC_POINTCLOUD_COMPRESSED: str = env("MQTT_TOPIC_POINTCLOUD_COMPRESSED", None)
 
-OUSTER_HOSTNAME: str = env("OUSTER_HOSTNAME")
+OUSTER_HOSTNAME: str = env("OUSTER_HOSTNAME", "10.10.40.2")
 
 # These are a set of Euler angles (roll, pitch, yaw) taking us from the platform body
 # frame to the Sensor frame, as defined in the Sensor documentation.

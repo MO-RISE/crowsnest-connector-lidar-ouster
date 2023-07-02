@@ -1,13 +1,17 @@
 # crowsnest-connector-lidar-ouster
-A crowsnest microservice for connecting to an Ouster Lidar
 
-### How it works
+A crowsnest microservice for connecting to an [Ouster Lidar SDK 0.8.1](https://static.ouster.dev/sdk-docs/index.html) 
 
-For now, this microservice jsut does the basics.
+## How it works
+
+For now, this microservice just does the basics.
+
 * Connects to an already configured Ouster sensor
 * Listens on the continuous stream of LidarScanPackets
 * Transform these to the NED frame (requires manual input for now and assumes a static sensor)
 * Wraps into a brefv message and outputs over MQTT
+* TODO: Output to file
+* TODO: Flag for connecting to MQTT broker
 
 For configuring the sensor hardware, the [TCP API](https://static.ouster.dev/sensor-docs/image_route1/image_route2/common_sections/API/tcp-api.html) is recommended.
 
@@ -30,9 +34,8 @@ services:
       - POINTCLOUD_FREQUENCY=2
 ```
 
-
-
 ## Development setup
+
 To setup the development environment:
 
     python3 -m venv venv
@@ -50,6 +53,7 @@ To run the linters:
 To run the tests:
 
     no automatic tests yet...
+
 
 ## License
 Apache 2.0, see [LICENSE](./LICENSE)
