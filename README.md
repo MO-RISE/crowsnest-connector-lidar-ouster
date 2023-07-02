@@ -10,12 +10,14 @@ For now, this microservice just does the basics.
 * Listens on the continuous stream of LidarScanPackets
 * Transform these to the NED frame (requires manual input for now and assumes a static sensor)
 * Wraps into a brefv message and outputs over MQTT
-* TODO: Output to file
-* TODO: Flag for connecting to MQTT broker
+* TODO: Container output to file
+
 
 For configuring the sensor hardware, the [TCP API](https://static.ouster.dev/sensor-docs/image_route1/image_route2/common_sections/API/tcp-api.html) is recommended.
 
 ### Typical setup (docker-compose)
+
+See also `docker-compose.example.yml`
 
 ```yaml
 version: '3'
@@ -40,20 +42,25 @@ OUSTER-SDK only supporting not higher then python 3.9 (2023-06-02)
 
 To setup the development environment:
 
+```bach
     python3 -m venv venv
     source ven/bin/activate
+```
 
 Install everything thats needed for development:
 
+```bach
     pip install -r requirements_dev.txt
+```
 
 To run the linters:
 
+```bach
     black main.py tests
     pylint main.py
+```
 
 To run the tests:
-
     no automatic tests yet...
 
 
@@ -66,4 +73,5 @@ datamodel-codegen --input brefv/messages --input-file-type jsonschema  --reuse-m
 ```
 
 ## License
+
 Apache 2.0, see [LICENSE](./LICENSE)
